@@ -1,4 +1,4 @@
-package bakup
+package main
 
 import (
 	"archive/zip"
@@ -10,10 +10,10 @@ import (
 type BakupGo struct {
 	Archive     *os.File
 	ZipFile     *zip.Writer
-	RootInclude *bool
-	Source      *string
-	Destination *string
-	Name        *string
+	RootInclude bool
+	Source      string
+	Destination string
+	Name        string
 }
 
 func (bg *BakupGo) Close() {
@@ -24,7 +24,7 @@ func (bg *BakupGo) Close() {
 func (bg *BakupGo) CreateZip(filename string) error {
 	var err error
 	Infof("Create Archive '%s'", filename)
-	bg.Archive, err = os.Create(filepath.Join(*bg.Destination, filename))
+	bg.Archive, err = os.Create(filepath.Join(bg.Destination, filename))
 	if err != nil {
 		return err
 	}
@@ -34,7 +34,8 @@ func (bg *BakupGo) CreateZip(filename string) error {
 
 func (bg *BakupGo) AppendFile(file string) error {
 	fileName := filepath.Base(file)
-	if *bg.RootInclude {
+	Debug("RootInclude:", bg.RootInclude)
+	if bg.RootInclude {
 		fileName = filepath.Join(filepath.Base(filepath.Dir(file)), filepath.Base(file))
 	}
 	Infof(" - Added '%s'", fileName)

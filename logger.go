@@ -1,4 +1,4 @@
-package bakup
+package main
 
 import (
 	"encoding/json"
